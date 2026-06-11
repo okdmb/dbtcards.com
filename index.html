@@ -469,7 +469,7 @@
   <button class="filter-btn" data-cat="interpersonal" aria-pressed="false">Interpersonal Effectiveness</button>
 </nav>
 
-<div class="card-stage" id="cardStage" data-main="true" tabindex="0" role="button" aria-label="Flip card — press Space or Enter">
+<div class="card-stage" id="cardStage" data-main="true" tabindex="0" role="button" aria-label="Flip card — press F">
   <a id="main-content" tabindex="-1" aria-hidden="true" style="position:absolute;top:0;width:0;height:0;overflow:hidden;display:block"></a>
   <div class="card-inner" id="cardInner">
     <div class="card-face card-front" id="cardFront">
@@ -538,7 +538,7 @@
 
 
 <div class="dot-row" id="dotRow" role="group" aria-label="Card progress — drag to navigate"></div>
-<p class="keyboard-hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> navigate &nbsp;&nbsp; <kbd>Space</kbd> flip &nbsp;&nbsp; <kbd>G</kbd> got it &nbsp;&nbsp; <kbd>S</kbd> still learning</p>
+<p class="keyboard-hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> navigate &nbsp;&nbsp; <kbd>F</kbd> flip &nbsp;&nbsp; <kbd>G</kbd> got it &nbsp;&nbsp; <kbd>S</kbd> still learning</p>
 
 <div aria-live="polite" aria-atomic="true" class="sr-only" id="cardAnnouncer"></div>
 <!-- Modal -->
@@ -966,7 +966,7 @@ function renderCard() {
   updateStats(); renderDots();
   // Announce card to screen readers
   const announcer = document.getElementById('cardAnnouncer');
-  if (announcer) announcer.textContent = `Card ${currentIndex+1} of ${deck.length}: ${card.title}. ${card.subtitle}. Press Space to reveal definition.`;
+  if (announcer) announcer.textContent = `Card ${currentIndex+1} of ${deck.length}: ${card.title}. ${card.subtitle}. Press F to reveal definition.`;
 }
 
 function renderDots() {
@@ -1084,6 +1084,8 @@ let _markBusy = false, _markTimer = null;
 function markCard(isKnown) {
   if (!deck.length || _markBusy) return;
   _markBusy = true;
+  // If still learning, flip back to front immediately if currently showing back
+  if (!isKnown && flipped) flipCard();
   // Capture index at click time — not after a delay
   const markedIndex = currentIndex;
   if (isKnown) { known.add(markedIndex); learning.delete(markedIndex); }
@@ -1111,7 +1113,7 @@ function shuffleDeck() {
 function resetDeck() { buildDeck(); }
 
 document.getElementById("cardStage").addEventListener("click", flipCard);
-document.getElementById("cardStage").addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter") flipCard(); });
+document.getElementById("cardStage").addEventListener("keydown", e=>{ if(e.key==="f"||e.key==="F") flipCard(); });
 document.querySelectorAll(".filter-btn").forEach(btn=>{
   btn.addEventListener("click",()=>{
     document.querySelectorAll(".filter-btn").forEach(b=>{ b.classList.remove("active"); b.setAttribute("aria-pressed","false"); });
