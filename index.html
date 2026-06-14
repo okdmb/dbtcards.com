@@ -1166,8 +1166,11 @@ document.addEventListener("keydown", e=>{
   if(e.key==="g"||e.key==="G") markCard(true);
   if(e.key==="s"||e.key==="S") markCard(false);
   if(e.key==="Escape") {
-    if (expandedOpen) closeExpanded();
-    else closeModal();
+    if (document.getElementById('previewModalOverlay').classList.contains('open')) {
+      closePreviewModal();
+    } else if (expandedOpen) {
+      closeExpanded();
+    } else closeModal();
   }
 });
 
@@ -1249,6 +1252,10 @@ function populateExpanded() {
         t.style.background = theme.dim;
         t.style.color = theme.color;
         t.style.borderColor = theme.border;
+        t.onclick = (e) => {
+          e.stopPropagation();
+          openSkillPreview(r);
+        };
       }
       
       relDiv.appendChild(t);
@@ -1363,6 +1370,54 @@ function closeModal() {
 // Close on overlay click
 document.getElementById('modalOverlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
+});
+
+function openSkillPreview(skillName) {
+  const card = SKILL_LOOKUP[skillName] || SKILL_LOOKUP[RELATED_ALIASES[skillName]];
+  if (!card) return;
+
+  const theme = catColors[card.cat];
+  const tag = document.getElementById('previewTag');
+  tag.textContent = theme.label;
+  tag.style.cssText = `background:${theme.dim};color:${theme.color};border-color:${theme.border}`;
+  
+  const body = document.getElementById('previewModalBody');
+  
+  let breakdownHTML = '';
+  if (card.breakdown && card.breakdown.length) {
+    breakdownHTML = `<div class="back-breakdown" style="margin: 0.5rem 0;">` + 
+      card.breakdown.map(item => `<span class="breakdown-item"><b>${item.b}</b>${item.t}</span>`).join('') + 
+      `</div>`;
+  }
+  
+  let detailHTML = card.detail ? `<div class="exp-section"><div class="exp-label">In Depth</div><div class="exp-text">${card.detail}</div></div>` : '';
+  let purposeHTML = card.purpose ? `<div class="exp-section"><div class="exp-label">Purpose</div><div class="exp-text">${card.purpose}</div></div>` : '';
+
+  body.innerHTML = `
+    <div class="gc-acronym" style="color: ${theme.color}">${card.acronym}</div>
+    <div class="gc-title">${card.title}</div>
+    <div class="gc-subtitle">${card.subtitle}</div>
+    <div class="back-definition">${card.definition}</div>
+    ${breakdownHTML}
+    ${detailHTML}
+    ${purposeHTML}
+  `;
+
+  document.getElementById('previewModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePreviewModal() {
+  document.getElementById('previewModalOverlay').classList.remove('open');
+  // Only restore overflow if the main grid modal isn't also open
+  if (!document.getElementById('modalOverlay').classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
+}
+
+// Close on overlay click
+document.getElementById('previewModalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePreviewModal();
 });
 
 window.addEventListener('resize', checkPillOverlap, { passive: true });
