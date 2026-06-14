@@ -1223,6 +1223,16 @@ function populateExpanded() {
       const t = document.createElement('span');
       t.className = 'exp-tag';
       t.textContent = r;
+      
+      // Resolve category and apply colors
+      const cat = SKILL_LOOKUP[r] || RELATED_ALIASES[r];
+      if (cat && catColors[cat]) {
+        const theme = catColors[cat];
+        t.style.background = theme.dim;
+        t.style.color = theme.color;
+        t.style.borderColor = theme.border;
+      }
+      
       relDiv.appendChild(t);
     });
   } else {
