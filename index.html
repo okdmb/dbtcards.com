@@ -1024,6 +1024,8 @@ function renderCard() {
 function renderDots() {
   const row = document.getElementById('dotRow');
   if (!row) return;
+  
+  row.style.maxWidth = '';
   row.innerHTML = '';
   deck.forEach((_, i) => {
     const d = document.createElement('div');
@@ -1033,6 +1035,17 @@ function renderDots() {
     else if (learning.has(i))    d.classList.add('learning');
     row.appendChild(d);
   });
+  
+  if (deck.length > 0) {
+    const avail = row.clientWidth - 8;
+    const totalWidth = (deck.length - 1) * 10 + 20;
+    
+    if (totalWidth > avail && avail > 0) {
+      const numRows = Math.ceil(totalWidth / avail);
+      const balancedWidth = Math.ceil(totalWidth / numRows) + 12;
+      row.style.maxWidth = (balancedWidth + 8) + 'px';
+    }
+  }
 }
 
 function updateStats() {
@@ -1432,7 +1445,10 @@ document.getElementById('previewModalOverlay').addEventListener('click', functio
   if (e.target === this) closePreviewModal();
 });
 
-window.addEventListener('resize', checkPillOverlap, { passive: true });
+window.addEventListener('resize', () => {
+  checkPillOverlap();
+  renderDots();
+}, { passive: true });
 
 // ── CONFETTI CELEBRATION ─────────────────────────────────────────────────────
 function launchConfetti() {
