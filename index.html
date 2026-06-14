@@ -919,9 +919,36 @@ const catColors = {
   interpersonal: { color:"var(--teal)",   dim:"var(--teal-dim)",   border:"var(--teal-border)",           label:"Interpersonal Effectiveness" }
 };
 
+const RELATED_ALIASES = {
+  "ABC": "emotion",
+  "HOW Skills": "mindfulness",
+  "WHAT Skills": "mindfulness",
+  "Opposite Action (Fear)": "emotion",
+  "Opposite Action (Sadness)": "emotion",
+  "Finding Relationships": "interpersonal",
+  "Willingness vs Willfulness": "distress",
+  "Middle Path": "interpersonal",
+  "Half-Smiling": "distress",
+  "Self-Soothe": "distress",
+  "Willingness": "distress",
+  "Life Worth Living": "emotion",
+  "Emotion Model": "emotion",
+  "Accumulate +": "emotion"
+};
+
+let SKILL_LOOKUP = {};
+
 let deck=[], currentIndex=0, known=new Set(), learning=new Set(), flipped=false, activeCategory="all";
 
 function buildDeck() {
+  // Populate lookup once
+  if (Object.keys(SKILL_LOOKUP).length === 0) {
+    CARDS.forEach(c => {
+      SKILL_LOOKUP[c.title] = c.cat;
+      SKILL_LOOKUP[c.acronym] = c.cat;
+    });
+  }
+
   deck = activeCategory==="all" ? [...CARDS] : CARDS.filter(c=>c.cat===activeCategory);
   currentIndex=0; known.clear(); learning.clear(); flipped=false;
   document.getElementById("cardStage").classList.remove("flipped");
