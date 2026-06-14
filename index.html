@@ -436,6 +436,19 @@
   .dot.current { background:var(--text); width:16px; border-radius:3px; }
   .dot.known   { background:var(--green); }
   .dot.learning{ background:var(--amber); }
+
+  .preview-panel {
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .preview-body .gc-acronym { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.8rem; font-weight:800; line-height:1; letter-spacing:-0.01em; margin-bottom: 0.2rem; }
+  .preview-body .gc-title { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.2rem; font-weight:600; color:var(--text); line-height:1.3; }
+  .preview-body .gc-subtitle { font-size:0.9rem; color:var(--muted); margin-bottom: 0.5rem; }
+  .preview-body .back-definition { font-family:'Plus Jakarta Sans',sans-serif; font-size:1rem; font-weight:400; line-height:1.6; color:var(--text); text-align: left; }
+  .preview-body .exp-section { text-align: left; margin-top: 0.5rem; }
+  
+  .exp-tag { cursor: pointer; transition: filter 0.2s; }
+  .exp-tag:hover { filter: brightness(1.2); }
 </style>
 </head>
 <body>
@@ -1558,5 +1571,18 @@ renderCard(); renderDots();
 </script>
 <canvas id="celebrationCanvas" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;display:none;z-index:9000;"></canvas>
 </main>
+
+<div class="modal-overlay" id="previewModalOverlay">
+  <div class="modal-panel preview-panel" id="previewModalPanel">
+    <div class="modal-header" style="justify-content: flex-start; gap: 10px;">
+      <span id="previewTag" class="card-category-tag" style="position:relative; top:0; left:0;"></span>
+      <div style="flex-grow: 1;"></div>
+      <button class="modal-close" onclick="closePreviewModal()">&#x2715;</button>
+    </div>
+    <div id="previewModalBody" class="preview-body" style="padding: 1rem; text-align: center; display: flex; flex-direction: column; gap: 0.75rem;">
+      <!-- Content populated dynamically -->
+    </div>
+  </div>
+</div>
 </body>
 </html>
