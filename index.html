@@ -1376,7 +1376,7 @@ function openSkillPreview(skillName) {
   const card = SKILL_LOOKUP[skillName] || SKILL_LOOKUP[RELATED_ALIASES[skillName]];
   if (!card) return;
 
-  const theme = catColors[card.cat];
+  const theme = catColors[card.cat] || { label: 'Skill', dim: 'rgba(255,255,255,0.1)', color: 'var(--muted)', border: 'var(--border)' };
   const tag = document.getElementById('previewTag');
   tag.textContent = theme.label;
   tag.style.cssText = `background:${theme.dim};color:${theme.color};border-color:${theme.border}`;
