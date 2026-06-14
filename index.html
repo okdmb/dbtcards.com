@@ -568,6 +568,18 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="previewModalOverlay">
+  <div class="modal-panel preview-panel" id="previewModalPanel">
+    <div class="modal-header" style="justify-content: flex-start; gap: 10px;">
+      <span id="previewTag" class="card-category-tag" style="position:relative; top:0; left:0;"></span>
+      <div style="flex-grow: 1;"></div>
+      <button class="modal-close" onclick="closePreviewModal()">&#x2715;</button>
+    </div>
+    <div id="previewModalBody" class="preview-body" style="padding: 1rem; text-align: center; display: flex; flex-direction: column; gap: 0.75rem;">
+      <!-- Content populated dynamically -->
+    </div>
+  </div>
+</div>
 <script>
 const CARDS = [
   // ── MINDFULNESS ──────────────────────────────────────────────────────────────
@@ -1627,17 +1639,6 @@ renderCard(); renderDots();
 <canvas id="celebrationCanvas" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;display:none;z-index:9000;"></canvas>
 </main>
 
-<div class="modal-overlay" id="previewModalOverlay">
-  <div class="modal-panel preview-panel" id="previewModalPanel">
-    <div class="modal-header" style="justify-content: flex-start; gap: 10px;">
-      <span id="previewTag" class="card-category-tag" style="position:relative; top:0; left:0;"></span>
-      <div style="flex-grow: 1;"></div>
-      <button class="modal-close" onclick="closePreviewModal()">&#x2715;</button>
-    </div>
-    <div id="previewModalBody" class="preview-body" style="padding: 1rem; text-align: center; display: flex; flex-direction: column; gap: 0.75rem;">
-      <!-- Content populated dynamically -->
-    </div>
-  </div>
-</div>
+
 </body>
 </html>
