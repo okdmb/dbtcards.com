@@ -920,20 +920,20 @@ const catColors = {
 };
 
 const RELATED_ALIASES = {
-  "ABC": "emotion",
-  "HOW Skills": "mindfulness",
-  "WHAT Skills": "mindfulness",
-  "Opposite Action (Fear)": "emotion",
-  "Opposite Action (Sadness)": "emotion",
-  "Finding Relationships": "interpersonal",
-  "Willingness vs Willfulness": "distress",
-  "Middle Path": "interpersonal",
-  "Half-Smiling": "distress",
-  "Self-Soothe": "distress",
-  "Willingness": "distress",
-  "Life Worth Living": "emotion",
-  "Emotion Model": "emotion",
-  "Accumulate +": "emotion"
+  "ABC": "Emotion Model", // "ABC" points to Emotion Model which has the breakdown
+  "HOW Skills": "HOW",
+  "WHAT Skills": "WHAT",
+  "Opposite Action (Fear)": "OPP ACTION",
+  "Opposite Action (Sadness)": "OPP ACTION",
+  "Finding Relationships": "FIND PEOPLE",
+  "Willingness vs Willfulness": "WILLING",
+  "Middle Path": "MIDDLE PATH",
+  "Half-Smiling": "HALF-SMILE",
+  "Self-Soothe": "SELF-SOOTHE",
+  "Willingness": "WILLING",
+  "Life Worth Living": "LIFE WORTH",
+  "Emotion Model": "EMOTION MODEL",
+  "Accumulate +": "ACCUMULATE +"
 };
 
 let SKILL_LOOKUP = {};
@@ -944,8 +944,8 @@ function buildDeck() {
   // Populate lookup once
   if (Object.keys(SKILL_LOOKUP).length === 0) {
     CARDS.forEach(c => {
-      SKILL_LOOKUP[c.title] = c.cat;
-      SKILL_LOOKUP[c.acronym] = c.cat;
+      SKILL_LOOKUP[c.title] = c;
+      SKILL_LOOKUP[c.acronym] = c;
     });
   }
 
@@ -1225,7 +1225,12 @@ function populateExpanded() {
       t.textContent = r;
       
       // Resolve category and apply colors
-      const cat = SKILL_LOOKUP[r] || RELATED_ALIASES[r];
+      let cat;
+      const lookupResult = SKILL_LOOKUP[r] || SKILL_LOOKUP[RELATED_ALIASES[r]];
+      if (lookupResult) {
+        cat = lookupResult.cat;
+      }
+      
       if (cat && catColors[cat]) {
         const theme = catColors[cat];
         t.style.background = theme.dim;
